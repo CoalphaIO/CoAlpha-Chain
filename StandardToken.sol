@@ -1,15 +1,17 @@
-pragma solidity ^0.4.21;
+pragma solidity 0.4.23;
 
 import "./SafeMath.sol";
+
 
 contract ERC20Basic {
     function totalSupply() public view returns (uint256);
     function balanceOf(address who) public view returns (uint256);
     function transfer(address to, uint256 value) public returns (bool);
     function burn(uint256 value) public returns (bool);
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Burn(address indexed from, uint256 value);
+    event EventTransfer(address indexed from, address indexed to, uint256 value);
+    event EventBurn(address indexed from, uint256 value);
 }
+
 
 contract ERC20 is ERC20Basic {
     function allowance(address owner, address spender) public view returns (uint256);
@@ -19,10 +21,11 @@ contract ERC20 is ERC20Basic {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
+
 contract BasicToken is ERC20Basic {
     using SafeMath for uint256;
-    mapping(address => uint256) balances;
-    uint256 totalSupply_;
+    mapping(address => uint256) internal balances;
+    uint256 internal totalSupply_;
 
     function totalSupply()
         public
@@ -44,7 +47,7 @@ contract BasicToken is ERC20Basic {
 
         balances[msg.sender] = balances[msg.sender].sub(_value);
         balances[_to] = balances[_to].add(_value);
-        emit Transfer(msg.sender, _to, _value);
+        emit EventTransfer(msg.sender, _to, _value);
         return true;
     }
 
@@ -57,7 +60,8 @@ contract BasicToken is ERC20Basic {
         require(balances[msg.sender] >= _value);
         balances[msg.sender] = balances[msg.sender].sub(_value);
         totalSupply_ = totalSupply_.sub(_value);
-        emit Burn(msg.sender, _value);
+        emit EventBurn(msg.sender, _value);
+        emit EventTransfer(msg.sender, address(0), _value);
         return true;
     }
 
@@ -71,6 +75,7 @@ contract BasicToken is ERC20Basic {
         return balances[_owner];
     }
 }
+
 
 contract StandardToken is ERC20, BasicToken {
     mapping (address => mapping (address => uint256)) internal allowed;
@@ -90,7 +95,7 @@ contract StandardToken is ERC20, BasicToken {
         balances[_from] = balances[_from].sub(_value);
         balances[_to] = balances[_to].add(_value);
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
-        emit Transfer(_from, _to, _value);
+        emit EventTransfer(_from, _to, _value);
         return true;
     }
 
@@ -106,7 +111,7 @@ contract StandardToken is ERC20, BasicToken {
         balances[_from] = balances[_from].sub(_value);
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
         totalSupply_ = totalSupply_.sub(_value);
-        emit Burn(_from, _value);
+        emit EventBurn(_from, _value);
         return true;
     }
 

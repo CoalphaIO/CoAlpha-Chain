@@ -1,8 +1,9 @@
-pragma solidity ^0.4.21;
+pragma solidity 0.4.23;
 
 import "./SafeMath.sol";
 import "./Ownable.sol";
 import "./CoAlphaToken.sol";
+
 
 contract CoAlphaTokenCornerStone is Ownable {
     using SafeMath for uint256;
@@ -23,8 +24,8 @@ contract CoAlphaTokenCornerStone is Ownable {
         uint256 _tokenPrice, 
         uint256 _releaseTime
     ) 
-        onlyOwner
         public
+        onlyOwner
     {
         require(_releaseTime > now);
         tokenContract = CoAlphaToken(_tokenContract);
@@ -34,10 +35,7 @@ contract CoAlphaTokenCornerStone is Ownable {
         releaseTime = _releaseTime;
     }
 
-    function () 
-        payable
-        public
-    {
+    function () public payable {
         require(tokenContract != CoAlphaToken(0));
         if (msg.sender != fundAccount) {
             require(msg.value >= minDonation);
@@ -51,8 +49,8 @@ contract CoAlphaTokenCornerStone is Ownable {
     function getEthersFromWei(
         uint256 _weiAmount
     )
-        view
         private
+        view
         returns (uint256)
     {
         return _weiAmount / weiPerEth;
@@ -61,8 +59,8 @@ contract CoAlphaTokenCornerStone is Ownable {
     function getRemainingFractionalEthersFromWei(
         uint256 _weiAmount
     )
-        view
         private
+        view
         returns (uint256)
     {
         return _weiAmount % weiPerEth;
@@ -71,8 +69,8 @@ contract CoAlphaTokenCornerStone is Ownable {
     function calculateTokensPerWeiFromBuyPrice(
         uint256 _weiAmount
     )
-        view
         private
+        view
         returns (uint256)
     {
         uint256 ethers = getEthersFromWei(_weiAmount);

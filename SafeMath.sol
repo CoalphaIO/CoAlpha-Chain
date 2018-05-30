@@ -1,4 +1,5 @@
-pragma solidity ^0.4.21;
+pragma solidity 0.4.23;
+
 
 library SafeMath {
     function mul(
@@ -7,13 +8,13 @@ library SafeMath {
     )
         internal
         pure
-        returns (uint256)
+        returns (uint256 c)
     {
         if (a == 0) {
             return 0;
         }
-        uint256 c = a * b;
-        assert(c / a == b);
+        c = a * b;
+        require(c / a == b);
         return c;
     }
 
@@ -25,8 +26,7 @@ library SafeMath {
         pure
         returns (uint256)
     {
-        uint256 c = a / b;
-        return c;
+        return a / b;
     }
 
     function sub(
@@ -37,7 +37,7 @@ library SafeMath {
         pure
         returns (uint256)
     {
-        assert(b <= a);
+        require(b <= a);
         return a - b;
     }
 
@@ -47,10 +47,10 @@ library SafeMath {
     )
         internal
         pure
-        returns (uint256)
+        returns (uint256 c)
     {
-        uint256 c = a + b;
-        assert(c >= a);
+        c = a + b;
+        require(c >= a);
         return c;
     }
 }
