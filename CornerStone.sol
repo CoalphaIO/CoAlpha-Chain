@@ -17,9 +17,9 @@ contract CoAlphaTokenCornerStone is Ownable {
         require(tokenContract != CoAlphaToken(0));
         if (msg.sender != fundAccount) {
             require(msg.value >= minDonation);
-            fundAccount.transfer(msg.value);
             uint256 amount = calculateTokensPerWeiFromBuyPrice(msg.value);
             tokenAccountList[msg.sender] = tokenAccountList[msg.sender].add(amount);
+            fundAccount.transfer(msg.value);
         }
     }
 
