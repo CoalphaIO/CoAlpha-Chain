@@ -65,7 +65,7 @@ contract CoAlphaTokenCornerStone is Ownable {
         view
         returns (uint256)
     {
-        return _weiAmount / weiPerEth;
+        return _weiAmount.div(weiPerEth);
     }
 
     function getRemainingFractionalEthersFromWei(
@@ -87,8 +87,8 @@ contract CoAlphaTokenCornerStone is Ownable {
     {
         uint256 ethers = getEthersFromWei(_weiAmount);
         uint256 remainingWeis = getRemainingFractionalEthersFromWei(_weiAmount);
-        uint256 etherFraction = remainingWeis / weiPerEth;
-        uint256 tokenAmount = (ethers * tokenPrice) + (etherFraction * tokenPrice);
+        uint256 etherFraction = remainingWeis.div(weiPerEth);
+        uint256 tokenAmount = (ethers.mul(tokenPrice)).add(etherFraction.mul(tokenPrice));
         return tokenAmount;
     }
 }
