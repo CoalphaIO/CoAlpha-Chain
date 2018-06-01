@@ -5,13 +5,15 @@ import "./Ownable.sol";
 import "./CoAlphaToken.sol";
 
 
-contract CoAlphaTokenCornerStone is Ownable {
+contract CoAlphaTokenPrivateSell is Ownable {
     using SafeMath for uint256;
-    CoAlphaToken public tokenContract;
-    address public fundAccount;
-    uint256 public tokenPrice;
-    mapping(address => uint256) public tokenAccountList;
-    uint256 public releaseTime;
+    uint256 private weiPerEth = 10**18;
+    uint256 private minDonation;
+    address private fundAccount;
+    CoAlphaToken private tokenContract;
+    uint256 private tokenPrice;
+    mapping(address => uint256) private tokenAccountList;
+    uint256 private releaseTime;
 
     function () public payable {
         require(tokenContract != CoAlphaToken(0));
@@ -23,9 +25,25 @@ contract CoAlphaTokenCornerStone is Ownable {
         }
     }
 
-    function configCornerStone(
-        address _tokenContract, 
-        address _fundAccount, 
+    function configFundAccount( 
+        address _fundAccount
+    ) 
+        public
+        onlyOwner
+    {
+        fundAccount = _fundAccount;
+    }
+
+    function configTokenContract( 
+        address _tokenContract
+    ) 
+        public
+        onlyOwner
+    {
+        tokenContract = CoAlphaToken(_tokenContract);
+    }
+
+    function configPrivateSell(
         uint256 _minDonation,
         uint256 _tokenPrice, 
         uint256 _releaseTime
@@ -33,8 +51,6 @@ contract CoAlphaTokenCornerStone is Ownable {
         public
         onlyOwner
     {
-        tokenContract = CoAlphaToken(_tokenContract);
-        fundAccount = _fundAccount;
         minDonation = _minDonation;
         tokenPrice = _tokenPrice;
         releaseTime = _releaseTime;
@@ -51,9 +67,6 @@ contract CoAlphaTokenCornerStone is Ownable {
             tokenContract.transferFrom(owner, msg.sender, amount);
         }
     }
-
-    uint256 private weiPerEth = 10**18;
-    uint256 private minDonation;
 
     function calculateTokensPerWeiFromBuyPrice(
         uint256 _weiAmount
