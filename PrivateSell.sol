@@ -56,6 +56,14 @@ contract CoAlphaTokenPrivateSell is Ownable {
         releaseTime = _releaseTime;
     }
 
+    function privateTokenBalance() 
+        public
+        view
+        returns (uint256)
+    {
+        return tokenAccountList[msg.sender];
+    }
+
     function releaseToken ()
         public
     {
