@@ -80,7 +80,7 @@ contract CoAlphaTokenConerstone is Ownable {
         require(curStep > 0 && curStep <= 5);
         uint256 needReleaseTokenTotal = tokenAccountList[msg.sender];
         if (curStep < 5) {
-            needReleaseTokenTotal = tokenAccountList[msg.sender].mod(curStep).div(5);
+            needReleaseTokenTotal = tokenAccountList[msg.sender].mul(curStep).div(5);
         }
         uint256 curReleaseTokenTotal = tokenReleaseList[msg.sender];
         uint256 amount = needReleaseTokenTotal - curReleaseTokenTotal;
